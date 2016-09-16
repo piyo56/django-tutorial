@@ -53,8 +53,11 @@ class ImageForm(forms.Form):
 
     def generate(self, image_format='PNG'):
         """Generate an image of the given type and return as raw bytes"""
-        height  = self.cleaned_data['height']
-        width   = self.cleaned_data['width']
+        #print("self.height:", type(self.height))
+        #print("height:", type(height))
+        #print("cleaned_data:", type(self.cleaned_data['height']))
+        height = self.cleaned_data['height']
+        width  = self.cleaned_data['width']
         key = '{}.{}.{}'.format(width, height, image_format)
         content = cache.get(key)
         if content is None:
@@ -92,6 +95,13 @@ def index(request):
         'example': request.build_absolute_uri(example)
     }
     return render(request, 'home.html', context)
+
+def log(filename, obj):
+    f = open(filename, "w")
+    f.write("length: {}".format(len(obj._buf)))
+    #for e in obj:
+    #    f.write("{} ".format(e.read()))
+    f.close()
 
 urlpatterns = (
     url(r'^image/(?P<width>[0-9]+)x(?P<height>[0-9]+)/$', placeholder, name='placeholder'),
